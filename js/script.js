@@ -9,6 +9,8 @@ const author =      document.querySelector('.author')
 const slideNext =   document.querySelector('.slide-next')
 const slidePrev =   document.querySelector('.slide-prev')
 
+
+
 // Первоначальное состояние / Initial state
 const state = {
   language: 'ru', // en
@@ -16,10 +18,7 @@ const state = {
   blocks: ['time', 'date','greeting', 'quote', 'weather', 'audio', 'todolist']
 }
 
-// Вызов функции / Function call
-showTime()
-getTimeOfDay()
-getQuotes()
+
 
 // Время / Time
 function showTime() {
@@ -37,6 +36,9 @@ function showTime() {
   date.textContent = currentDate
   setTimeout(showTime, 1000)
 }
+showTime()
+
+
 
 // Время суток / Times of Day
 function getTimeOfDay() {
@@ -78,6 +80,9 @@ function getTimeOfDay() {
   setTimeout(getTimeOfDay, 1000)
   return timeOfDay
 }
+getTimeOfDay()
+
+
 
 // Приветствие / Greetings
 function setLocalStorage() {
@@ -98,6 +103,92 @@ function getLocalStorage() {
 }
 window.addEventListener('load', getLocalStorage)
 
+
+
+// Слайдер изображений / Image Slider
+function getRandomNum() {
+  return Math.ceil(Math.random() * 20)
+}
+
+let randomNum = getRandomNum()
+
+function getSlideNext() {
+  if (randomNum === 20) randomNum = 0
+
+  randomNum++
+
+  if (state.photoSource === 'GitHub') setBg()
+  else if (state.photoSource === 'Unsplash') getLinkUnsplash()
+  else if (state.photoSource === 'Flickr') getLinkFlickr()
+
+  return randomNum
+}
+slideNext.addEventListener('click', getSlideNext)
+
+function getSlidePrev() {
+  if (randomNum === 1) randomNum = 21
+
+  randomNum--
+
+  if (state.photoSource === 'GitHub') setBg()
+  else if (state.photoSource === 'Unsplash') getLinkUnsplash()
+  else if (state.photoSource === 'Flickr') getLinkFlickr()
+
+  return randomNum
+}
+slidePrev.addEventListener('click', getSlidePrev)
+
+function setBg() {
+  if (state.photoSource === 'GitHub') {
+    const timeOfDay = getTimeOfDay()
+    const img = new Image()
+    let bgNum = String(randomNum).padStart(2, '0')
+    img.src = `https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
+    img.addEventListener('load', () => {
+      body.style.backgroundImage = `url(${img.src})`
+    })
+  }
+  else if (state.photoSource === 'Unsplash') getLinkUnsplash()
+  else if (state.photoSource === 'Flickr') getLinkFlickr()
+
+}
+setBg()
+
+function getLinkUnsplash() {
+  const timeOfDay = getTimeOfDay()
+  const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${timeOfDay}&client_id=TqFhLBt2qicqrSQsaEmtapczipfTjTlLhJXk-oL4aXw`
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const img = new Image()
+      img.src = data.urls.regular
+      img.addEventListener('load', () => {
+        body.style.backgroundImage = `url(${img.src})`
+        body.style.backgroundSize = 'cover'
+      })
+    })
+
+}
+
+function getLinkFlickr() {
+  const timeOfDay = getTimeOfDay()
+  const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=60e0a6184a77c896dbba350f339c1488&tags=${timeOfDay}&extras=url_l&format=json&nojsoncallback=1`
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const img = new Image()
+      img.src = data.photos.photo[Math.ceil(Math.random() * 100)].url_l
+      img.addEventListener('load', () => {
+        body.style.backgroundImage = `url(${img.src})`
+        body.style.backgroundSize = 'cover'
+      })
+    })
+}
+
+
+
 // Цитаты / Quotes
 function getQuotes() {
   const url = `assets/json/data-${state.language}.json`
@@ -116,3 +207,4 @@ function getQuotes() {
       })
     })
 }
+getQuotes()
