@@ -1,20 +1,27 @@
-const body =        document.querySelector('body')
-const time =        document.querySelector('.time')
-const date =        document.querySelector('.date')
-const greeting =    document.querySelector('.greeting')
-const userName =    document.querySelector('.name')
-const changeQuote = document.querySelector('.change-quote')
-const quote =       document.querySelector('.quote')
-const author =      document.querySelector('.author')
-const slideNext =   document.querySelector('.slide-next')
-const slidePrev =   document.querySelector('.slide-prev')
+const body =                document.querySelector('body')
+const time =                document.querySelector('.time')
+const date =                document.querySelector('.date')
+const greeting =            document.querySelector('.greeting')
+const userName =            document.querySelector('.name')
+const changeQuote =         document.querySelector('.change-quote')
+const quote =               document.querySelector('.quote')
+const author =              document.querySelector('.author')
+const slideNext =           document.querySelector('.slide-next')
+const slidePrev =           document.querySelector('.slide-prev')
+const city =                document.querySelector('.city');
+const weatherIcon =         document.querySelector('.weather-icon');
+const temperature =         document.querySelector('.temperature');
+const weatherDescription =  document.querySelector('.weather-description');
+const wind =                document.querySelector('.wind');
+const humidity =            document.querySelector('.humidity');
 
 
 
 // Первоначальное состояние / Initial state
 const state = {
+  city: 'Минск', // Ekaterinburg
   language: 'ru', // en
-  photoSource: 'GitHub',
+  photoSource: 'GitHub', // Unsplash, Flickr
   blocks: ['time', 'date','greeting', 'quote', 'weather', 'audio', 'todolist']
 }
 
@@ -91,7 +98,7 @@ function setLocalStorage() {
 window.addEventListener('beforeunload', setLocalStorage)
 
 function getLocalStorage() {
-  if (state.language == 'ru') {
+  if (state.language === 'ru') {
     userName.placeholder = "[Введите имя]"
   } else {
     userName.placeholder = "[Enter name]"
@@ -165,10 +172,8 @@ function getLinkUnsplash() {
       img.src = data.urls.regular
       img.addEventListener('load', () => {
         body.style.backgroundImage = `url(${img.src})`
-        body.style.backgroundSize = 'cover'
       })
     })
-
 }
 
 function getLinkFlickr() {
@@ -182,10 +187,65 @@ function getLinkFlickr() {
       img.src = data.photos.photo[Math.ceil(Math.random() * 100)].url_l
       img.addEventListener('load', () => {
         body.style.backgroundImage = `url(${img.src})`
-        body.style.backgroundSize = 'cover'
       })
     })
 }
+
+
+
+// Погода / Weather
+window.addEventListener('beforeunload', () => {
+  localStorage.setItem('city', city.value)
+})
+
+if (localStorage.getItem('city')) {
+  city.value = localStorage.getItem('city')
+} else {
+  city.value = state.city
+}
+
+function getWeather() {
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${state.language}&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.cod == 404 || city.value === '') {
+        if (state.language === 'ru') {
+          city.placeholder = 'Неверный город'
+          alert('Город указан неверно')
+        } else {
+          city.placeholder = 'Wrong city'
+        }
+
+        city.value = ''
+        weatherIcon.className = ''
+        temperature.textContent = ''
+        weatherDescription.textContent = ''
+        wind.textContent = ''
+        humidity.textContent = ''
+      } else {
+        let valueWindSpeed = {
+          'en': `Wind speed: ${Math.round(data.wind.speed)} m/s`,
+          'ru': `Скорость ветра: ${Math.round(data.wind.speed)} м/c`,
+        }
+
+        let valueHumidity = {
+          'en': `Humidity: ${data.main.humidity}%`,
+          'ru': `Влажность: ${data.main.humidity}%`,
+        }
+
+        weatherIcon.className = 'weather-icon owf'
+        weatherIcon.classList.add(`owf-${data.weather[0].id}`)
+        temperature.textContent = `${Math.round(data.main.temp)}°C`
+        weatherDescription.textContent = data.weather[0].description
+        wind.textContent = valueWindSpeed[state.language]
+        humidity.textContent = valueHumidity[state.language]
+      }
+    })
+}
+city.addEventListener('change', getWeather)
+getWeather()
 
 
 
