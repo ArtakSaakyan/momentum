@@ -10,7 +10,7 @@
 </head>
 <body>
   <header class="header">
-    <div class="player">
+    <div id="player" class="player">
       <div class="player-controls">
         <button class="play-prev player-icon"></button>
         <button class="play player-icon"></button>
@@ -18,7 +18,7 @@
       </div>
       <ul class="play-list"></ul>
     </div>
-    <div class="weather">
+    <div id="weather" class="weather">
       <input type="text" class="city" />
       <i class="weather-icon owf"></i>
       <div class="weather-error"></div>
@@ -35,18 +35,72 @@
       <button class="slide-prev slider-icon"></button>
       <button class="slide-next slider-icon"></button>
     </div>
-    <time class="time"></time>
-    <date class="date"></date>
-    <div class="greeting-container">
+    <time id="time" class="time"></time>
+    <date id="date" class="date"></date>
+    <div id="greeting" class="greeting-container">
       <span class="greeting"></span>
       <input type="text" class="name" />
     </div>
   </main>
   <footer class="footer">
-    <button class="change-quote"></button>
-    <div>
-      <div class="quote"></div>
-      <div class="author"></div>
+    <div id="quote" class="quote-container">
+      <button class="change-quote"></button>
+      <div>
+        <div class="quote"></div>
+        <div class="author"></div>
+      </div>
+    </div>
+    <div class="settings">
+      <img class="settings-img" src="assets/svg/settings.svg" alt="Settings">
+      <div class="settings-container">
+        <select class="settings-list language" name="language">
+          <option value="en">English</option>
+          <option value="ru">Russian</option>
+        </select>
+        <select class="settings-list images" name="images">
+          <option value="GitHub">GitHub</option>
+          <option value="Unsplash">Unsplash</option>
+          <option value="Flickr">Flickr</option>
+        </select>
+        <div class="block-hidden">
+          <div class="block-hidden-title">Hide Block</div>
+          <div id="hiddenList" class="block-hidden-list">
+            <label>
+              <input class="hidden-checkbox" type="checkbox" name="player" value="player">
+              Player
+            </label>
+            <label>
+              <input class="hidden-checkbox" type="checkbox" name="weather" value="weather">
+              Weather
+            </label>
+            <label>
+              <input class="hidden-checkbox" type="checkbox" name="time" value="time">
+              Time
+            </label>
+            <label>
+              <input class="hidden-checkbox" type="checkbox" name="date" value="date">
+              Date
+            </label>
+            <label>
+              <input class="hidden-checkbox" type="checkbox" name="greeting" value="greeting">
+              Greeting
+            </label>
+            <label>
+              <input class="hidden-checkbox" type="checkbox" name="quote" value="quote">
+              Quote
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://github.com/ArtakSaakyan" class="github" target="_blank">
+        <img src="assets/svg/github.svg" alt="GitHub">
+      <a>
+      <a href="https://rs.school/js/" class="rsschool" target="_blank">
+        <img src="assets/svg/rs_school.svg" alt="RS School">
+      <a>
+      <p class="year">Momentum © 2023</p>
     </div>
   </footer>
   <script type="module" src="js/script.js"></script>

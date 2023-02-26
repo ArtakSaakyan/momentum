@@ -1,7 +1,8 @@
 @font-face {
   font-family: 'Arial-MT';
-  src: url("../assets/fonts/Arial-MT.woff"); /* Путь к файлу со шрифтом */
- }
+  src: url("../assets/fonts/Arial-MT.woff");
+  /* Путь к файлу со шрифтом */
+}
 
 * {
   box-sizing: border-box;
@@ -32,6 +33,10 @@ body {
   height: 30vh;
   min-height: 220px;
   padding: 20px;
+}
+
+.player {
+  transition: .3s;
 }
 
 .player-controls {
@@ -130,6 +135,7 @@ body {
   width: 180px;
   min-height: 180px;
   text-align: left;
+  transition: .3s;
 }
 
 .weather-error {
@@ -202,12 +208,14 @@ body {
   font-family: 'Arial-MT';
   font-size: 100px;
   letter-spacing: -4px;
+  transition: .3s;
 }
 
 .date {
   min-height: 28px;
   font-size: 24px;
   margin-bottom: 20px;
+  transition: .3s;
 }
 
 .greeting-container {
@@ -224,6 +232,7 @@ body {
   flex: 1;
   padding: 10px;
   text-align: right;
+  transition: .3s;
 }
 
 .name {
@@ -254,12 +263,18 @@ body {
   padding: 20px;
 }
 
+.quote-container {
+  transition: .3s;
+}
+
 .change-quote {
   margin-bottom: 30px;
   background-image: url("../assets/svg/reload.svg");
 }
 
 .quote {
+  width: 75%;
+  margin: 0 auto;
   min-height: 32px;
 }
 
@@ -288,3 +303,83 @@ body {
   }
 }
 
+/* Настройки / Settings */
+.settings {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}
+
+.settings-img {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.settings-container {
+  position: absolute;
+  bottom: 45px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: #BEBEBE;
+  border-radius: 20px;
+  transition: .3s;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.settings-list {
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.settings-active {
+  bottom: 60px;
+  transition: .3s;
+  visibility: visible;
+  opacity: 1;
+}
+
+
+
+/* Авторские права / Copyright */
+.copyright {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.github img, .rsschool img {
+  height: 40px;
+  filter: invert(100%);
+  transition: .3s;
+  opacity: .8;
+}
+
+.github img:hover, .rsschool img:hover {
+  opacity: 1;
+}
+
+
+
+.block-hidden-title {
+  margin-bottom: 5px;
+}
+
+.block-hidden-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start
+}
+
+.block-hidden-element {
+  visibility: hidden;
+  opacity: 0;
+  transition: .5s;
+}
