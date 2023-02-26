@@ -1,3 +1,5 @@
+import playList from './playList.js'
+
 const body =                document.querySelector('body')
 const time =                document.querySelector('.time')
 const date =                document.querySelector('.date')
@@ -8,12 +10,17 @@ const quote =               document.querySelector('.quote')
 const author =              document.querySelector('.author')
 const slideNext =           document.querySelector('.slide-next')
 const slidePrev =           document.querySelector('.slide-prev')
-const city =                document.querySelector('.city');
-const weatherIcon =         document.querySelector('.weather-icon');
-const temperature =         document.querySelector('.temperature');
-const weatherDescription =  document.querySelector('.weather-description');
-const wind =                document.querySelector('.wind');
-const humidity =            document.querySelector('.humidity');
+const city =                document.querySelector('.city')
+const weatherIcon =         document.querySelector('.weather-icon')
+const temperature =         document.querySelector('.temperature')
+const weatherDescription =  document.querySelector('.weather-description')
+const wind =                document.querySelector('.wind')
+const humidity =            document.querySelector('.humidity')
+const play =                document.querySelector('.play')
+const prevSong =            document.querySelector('.play-prev')
+const nextSong =            document.querySelector('.play-next')
+const playItems =           document.querySelectorAll('.play-item')
+const playListContainer =   document.querySelector('.play-list')
 
 
 
@@ -205,7 +212,7 @@ if (localStorage.getItem('city')) {
 }
 
 function getWeather() {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${state.language}&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${state.language}&appid=08f2a575dda978b9c539199e54df03b0&units=metric`
 
   fetch(url)
     .then(response => response.json())
@@ -268,3 +275,71 @@ function getQuotes() {
     })
 }
 getQuotes()
+
+
+
+// Аудиоплеер / Audio player
+const audio = new Audio()
+let isPlay = false
+let playNum = 0
+
+playList.forEach(song => {
+  let li = document.createElement('li')
+  li.classList.add('play-item')
+  li.textContent = song.title
+  playListContainer.append(li)
+})
+
+function playAudio() {
+  audio.src = playList[playNum].src
+  audio.currentTime = playNum
+  playItems[playNum].classList.add('item-active')
+
+  if (!isPlay) {
+    audio.play()
+    isPlay = true
+  } else {
+    audio.pause()
+    isPlay = false
+  }
+}
+play.addEventListener('click', playAudio)
+
+function toggleBtn() {
+  if (isPlay) {
+    play.classList.add('pause')
+  } else {
+    play.classList.remove('pause')
+  }
+}
+play.addEventListener('click', toggleBtn)
+
+function playPrev() {
+  playItems[playNum].classList.remove('item-active')
+
+  if (playNum === 0) {
+    playNum = playList.length
+  }
+
+  playNum--
+  isPlay = false
+  playAudio()
+  toggleBtn()
+  return playNum
+}
+prevSong.addEventListener('click', playPrev)
+
+function playNext() {
+  playItems[playNum].classList.remove('item-active')
+
+  if (playNum === playList.length - 1) {
+    playNum = -1
+  }
+
+  playNum++
+  isPlay = false
+  playAudio()
+  toggleBtn()
+  return playNum
+}
+nextSong.addEventListener('click', playNext)
